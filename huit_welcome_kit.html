@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUIT — New Device Welcome Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --crimson: #A51C30;
+  --crimson-dk: #8c1626;
+  --crimson-bg: #f8eaec;
+  --navy: #1a2340;
+  --navy2: #2c3a5c;
+  --slate: #4a5568;
+  --slate2: #718096;
+  --border: #e2e4e9;
+  --bg: #f4f5f8;
+  --white: #ffffff;
+  --green: #0f6e56;
+  --green-bg: #e1f5ee;
+  --green-bd: #9FE1CB;
+  --amber: #7a4a0a;
+  --amber-bg: #fdf3e1;
+  --amber-bd: #FAC775;
+  --blue: #185fa5;
+  --blue-bg: #e8f2fb;
+  --blue-bd: #B5D4F4;
+  --purple: #534AB7;
+  --purple-bg: #EEEDFE;
+  --font: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--navy);min-height:100vh;font-size:15px;line-height:1.6}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--navy);height:54px;display:flex;align-items:center;padding:0 2rem;position:sticky;top:0;z-index:300}
+.topbar-inner{max-width:1100px;width:100%;margin:auto;display:flex;align-items:center;justify-content:space-between}
+.topbar-brand{display:flex;align-items:center;gap:11px}
+.shield{width:24px;height:28px;flex-shrink:0}
+.t-name{font-size:13px;font-weight:500;color:rgba(255,255,255,.9)}
+.t-sub{font-size:11px;color:rgba(255,255,255,.38);margin-top:1px}
+.t-tag{font-size:11px;font-family:var(--mono);color:rgba(255,255,255,.35);letter-spacing:.05em}
+
+/* ── HERO / WELCOME CARD ── */
+.welcome-hero{background:var(--navy);padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
+.welcome-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 0%,rgba(165,28,48,.35) 0%,transparent 65%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:1rem}
+.hero-title{font-size:2.4rem;font-weight:300;color:white;letter-spacing:-.025em;margin-bottom:.4rem}
+.hero-title strong{font-weight:700}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.55);max-width:480px;margin:0 auto 2rem}
+.hero-cards{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;max-width:760px;margin:0 auto}
+.qr-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px 20px;text-align:center;min-width:160px;flex:1;max-width:200px}
+.qr-box{width:72px;height:72px;background:white;border-radius:8px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--slate2);font-family:var(--mono);padding:4px;line-height:1.3}
+.qr-label{font-size:12px;font-weight:500;color:rgba(255,255,255,.8);margin-bottom:3px}
+.qr-url{font-size:10px;color:rgba(255,255,255,.35);font-family:var(--mono)}
+
+/* ── PLATFORM TABS ── */
+.platform-nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 2rem;position:sticky;top:54px;z-index:200}
+.platform-nav-inner{max-width:1100px;margin:auto;display:flex;gap:0}
+.ptab{padding:14px 24px;font-size:14px;font-weight:500;color:var(--slate2);border-bottom:2.5px solid transparent;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:8px;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font)}
+.ptab:hover{color:var(--navy)}
+.ptab.active{color:var(--crimson);border-bottom-color:var(--crimson)}
+.ptab-icon{font-size:16px}
+
+/* ── MAIN ── */
+main{max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+.platform-section{display:none}
+.platform-section.active{display:block}
+
+/* ── SECTION INTRO ── */
+.platform-intro{display:flex;align-items:center;gap:14px;margin-bottom:2rem;padding:18px 22px;background:var(--white);border:1px solid var(--border);border-radius:12px}
+.platform-logo{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.logo-dell{background:#006CB7;color:white}
+.logo-apple{background:#1d1d1f;color:white}
+.platform-intro-text h2{font-size:18px;font-weight:600;color:var(--navy);margin-bottom:2px}
+.platform-intro-text p{font-size:13px;color:var(--slate2)}
+
+/* ── GUIDE GRID ── */
+.guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+
+/* ── GUIDE CARD ── */
+.guide-card{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:box-shadow .18s,border-color .18s}
+.guide-card:hover{box-shadow:0 4px 20px rgba(26,35,64,.08);border-color:#c8cbd4}
+.guide-header{padding:18px 20px 14px;display:flex;align-items:flex-start;gap:13px;border-bottom:1px solid var(--border)}
+.guide-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.guide-header-text h3{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:3px}
+.guide-header-text p{font-size:12px;color:var(--slate2);line-height:1.45}
+.guide-body{padding:18px 20px}
+
+/* ── STEPS ── */
+.step-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.step-item{display:flex;gap:12px;align-items:flex-start}
+.step-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;margin-top:1px}
+.step-content{flex:1}
+.step-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:2px}
+.step-desc{font-size:12px;color:var(--slate2);line-height:1.55}
+.step-code{font-family:var(--mono);font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:2px 7px;display:inline-block;margin-top:4px;color:var(--slate)}
+
+/* ── TIP BOX ── */
+.tip-box{background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:8px;padding:11px 14px;font-size:12px;color:var(--blue);margin-top:14px;line-height:1.55}
+.tip-box strong{font-weight:600}
+.warn-box{background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:8px;padding:11px 14px;font-size:12px;color:var(--amber);margin-top:14px;line-height:1.55}
+.warn-box strong{font-weight:600}
+.green-box{background:var(--green-bg);border:1px solid var(--green-bd);border-radius:8px;padding:11px 14px;font-size:12px;color:var(--green);margin-top:14px;line-height:1.55}
+.green-box strong{font-weight:600}
+
+/* ── SHORTCUT TABLE ── */
+.shortcut-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:2px}
+.shortcut-row{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--bg);border-radius:6px;font-size:12px}
+.shortcut-label{color:var(--slate);flex:1}
+.shortcut-keys{font-family:var(--mono);font-size:11px;color:var(--navy);font-weight:500;background:white;border:1px solid var(--border);border-radius:4px;padding:2px 7px;white-space:nowrap}
+
+/* ── CONTACT STRIP ── */
+.contact-strip{background:var(--navy);border-radius:14px;padding:24px 28px;margin-top:2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.contact-strip-left h3{font-size:16px;font-weight:600;color:white;margin-bottom:4px}
+.contact-strip-left p{font-size:13px;color:rgba(255,255,255,.5)}
+.contact-chips{display:flex;gap:10px;flex-wrap:wrap}
+.contact-chip{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:500;color:rgba(255,255,255,.85);text-decoration:none;transition:background .15s}
+.contact-chip:hover{background:rgba(255,255,255,.15)}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:2rem;font-size:11px;color:var(--slate2);border-top:1px solid var(--border)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.guide-card{animation:fadeUp .22s ease forwards}
+
+@media(max-width:600px){
+  .hero-title{font-size:1.7rem}
+  main{padding:1.5rem 1rem 4rem}
+  .shortcut-grid{grid-template-columns:1fr}
+  .ptab span{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-brand">
+      <svg class="shield" viewBox="0 0 40 48" fill="none">
+        <path d="M20 2L38 10V28C38 38 30 44 20 46C10 44 2 38 2 28V10L20 2Z" fill="#A51C30"/>
+        <text x="20" y="25" font-family="Georgia,serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">VE·RI</text>
+        <text x="20" y="36" font-family="Georgia,serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">TAS</text>
+      </svg>
+      <div>
+        <div class="t-name">HUIT Endpoint Solutions</div>
+        <div class="t-sub">Harvard University Information Technology</div>
+      </div>
+    </div>
+    <div class="t-tag">New Device Kit · FY26</div>
+  </div>
+</header>
+
+<!-- WELCOME HERO -->
+<div class="welcome-hero">
+  <div class="hero-eyebrow">&#9670; Harvard University Information Technology</div>
+  <h1 class="hero-title">Welcome to your<br><strong>Harvard computer.</strong></h1>
+  <p class="hero-sub">Everything you need to get started, stay secure, and get help — all in one place.</p>
+  <div class="hero-cards">
+    <div class="qr-card">
+      <div class="qr-box">
+        &#9632;&#9632;&#9632;<br>QR<br>huit.harvard.edu<br>/it-help
+      </div>
+      <div class="qr-label">HUIT Help &amp; Support</div>
+      <div class="qr-url">huit.harvard.edu/it-help</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-box">
+        &#9632;&#9632;&#9632;<br>QR<br>huit.harvard.edu<br>/refresh
+      </div>
+      <div class="qr-label">Device Refresh Portal</div>
+      <div class="qr-url">huit.harvard.edu/refresh</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-box">
+        &#9632;&#9632;&#9632;<br>QR<br>huit.harvard.edu<br>/loaner
+      </div>
+      <div class="qr-label">Loaner &amp; WISC Program</div>
+      <div class="qr-url">huit.harvard.edu/loaner</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-box">
+        &#9632;&#9632;&#9632;<br>QR<br>key.harvard.edu
+      </div>
+      <div class="qr-label">HarvardKey &amp; Account</div>
+      <div class="qr-url">key.harvard.edu</div>
+    </div>
+  </div>
+</div>
+
+<!-- PLATFORM TABS -->
+<nav class="platform-nav">
+  <div class="platform-nav-inner">
+    <button class="ptab active" onclick="switchPlatform('dell', this)">
+      <span class="ptab-icon">&#128187;</span> <span>Dell · Windows</span>
+    </button>
+    <button class="ptab" onclick="switchPlatform('apple', this)">
+      <span class="ptab-icon">&#63743;</span> <span>Apple · Mac</span>
+    </button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════
+     DELL / WINDOWS
+══════════════════════════════════════════ -->
+<div id="section-dell" class="platform-section active">
+
+  <div class="platform-intro">
+    <div class="platform-logo logo-dell">D</div>
+    <div class="platform-intro-text">
+      <h2>Dell — Windows Quick Guides</h2>
+      <p>Six essential guides for your new Harvard Dell device running Windows 11.</p>
+    </div>
+  </div>
+
+  <div class="guide-grid">
+
+    <!-- 1. GETTING HELP -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--crimson-bg)">&#128222;</div>
+        <div class="guide-header-text">
+          <h3>Getting Help from HUIT</h3>
+          <p>Hardware issues, software problems, account help — we've got you.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">1</div>
+            <div class="step-content">
+              <div class="step-title">Submit a ticket online</div>
+              <div class="step-desc">Go to <strong>huit.harvard.edu/it-help</strong> and click "Get Help." Sign in with your HarvardKey. Describe your issue and submit — a technician will follow up.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">2</div>
+            <div class="step-content">
+              <div class="step-title">Call the Help Desk</div>
+              <div class="step-desc">Phone: <strong>617-495-7777</strong>. Available Monday–Friday, 8am–8pm ET. For urgent issues, call directly.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">3</div>
+            <div class="step-content">
+              <div class="step-title">Walk-in support</div>
+              <div class="step-desc">Visit the HUIT Tech Bar in person for hardware repairs, replacements, or hands-on help. Check <strong>huit.harvard.edu/locations</strong> for current hours and locations.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">4</div>
+            <div class="step-content">
+              <div class="step-title">Loaner devices</div>
+              <div class="step-desc">Need a temporary device while yours is serviced? Visit <strong>huit.harvard.edu/loaner</strong> or ask at the Tech Bar. The WISC program also offers equipment loans.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="tip-box"><strong>Tip:</strong> When contacting support, have your Harvard ID (HUID) and your device serial number ready. Find the serial number on the label on the bottom of your Dell.</div>
+      </div>
+    </div>
+
+    <!-- 2. RESET / RESTART -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--blue-bg)">&#128260;</div>
+        <div class="guide-header-text">
+          <h3>Restart, Shut Down &amp; Reset</h3>
+          <p>What to do when things slow down, freeze, or need a fresh start.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--blue)">1</div>
+            <div class="step-content">
+              <div class="step-title">Restart your device</div>
+              <div class="step-desc">Click the <strong>Start menu</strong> (Windows key) → Power icon → <strong>Restart</strong>. Do this regularly to apply updates and clear temporary files.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--blue)">2</div>
+            <div class="step-content">
+              <div class="step-title">Shut down properly</div>
+              <div class="step-desc">Always use Start → Power → <strong>Shut Down</strong> rather than holding the power button. This ensures Windows saves your settings correctly.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--blue)">3</div>
+            <div class="step-content">
+              <div class="step-title">Force restart (frozen device)</div>
+              <div class="step-desc">Hold the <strong>power button</strong> for 10 seconds until the screen goes black. Wait 5 seconds, then press the power button once to restart.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--blue)">4</div>
+            <div class="step-content">
+              <div class="step-title">Factory reset (last resort)</div>
+              <div class="step-desc">Go to Settings → System → Recovery → <strong>Reset this PC</strong>. Contact HUIT before doing this — they can recover your data and reconfigure your device properly.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="warn-box"><strong>Note:</strong> Do not factory reset without contacting HUIT first. Your device is managed by Harvard IT and a reset without support may require re-enrollment.</div>
+      </div>
+    </div>
+
+    <!-- 3. SAVE & SYNC -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--green-bg)">&#9729;</div>
+        <div class="guide-header-text">
+          <h3>Saving &amp; Syncing Files</h3>
+          <p>Keep your work safe and accessible from anywhere.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--green)">1</div>
+            <div class="step-content">
+              <div class="step-title">Use OneDrive (recommended)</div>
+              <div class="step-desc">Your Harvard Microsoft 365 account includes <strong>OneDrive</strong> with 1 TB of storage. Save files to your OneDrive folder and they sync automatically to the cloud.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--green)">2</div>
+            <div class="step-content">
+              <div class="step-title">Sign in to OneDrive</div>
+              <div class="step-desc">Open OneDrive from the taskbar (cloud icon). Sign in with your <strong>Harvard email</strong> (e.g. jsmith@harvard.edu). Your files will begin syncing immediately.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--green)">3</div>
+            <div class="step-content">
+              <div class="step-title">SharePoint &amp; Teams files</div>
+              <div class="step-desc">Files shared with you in Teams or SharePoint can also sync to your desktop via OneDrive. Right-click any SharePoint folder → <strong>Sync</strong>.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--green)">4</div>
+            <div class="step-content">
+              <div class="step-title">Never save only to Desktop or Downloads</div>
+              <div class="step-desc">These folders are not automatically backed up. Always save important files to OneDrive so you don't lose work if your device needs to be replaced.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="green-box"><strong>Quick check:</strong> Look for the OneDrive cloud icon in your taskbar. A green checkmark means your files are synced. A blue spinning icon means syncing is in progress.</div>
+      </div>
+    </div>
+
+    <!-- 4. CHARGING & CARE -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--amber-bg)">&#9889;</div>
+        <div class="guide-header-text">
+          <h3>Charging &amp; Device Care</h3>
+          <p>Keep your Dell running at its best.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--amber)">1</div>
+            <div class="step-content">
+              <div class="step-title">Use the included charger only</div>
+              <div class="step-desc">Always use the <strong>Dell-supplied USB-C charger</strong> or an approved 65W+ USB-C PD adapter. Third-party chargers may underperform or damage the battery.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--amber)">2</div>
+            <div class="step-content">
+              <div class="step-title">Battery care tips</div>
+              <div class="step-desc">Avoid letting the battery drop below 20% regularly. Dell's battery health software will alert you if the battery needs attention — don't ignore these alerts.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--amber)">3</div>
+            <div class="step-content">
+              <div class="step-title">Physical care</div>
+              <div class="step-desc">Clean the screen with a <strong>dry microfiber cloth</strong> only. Avoid eating or drinking near the keyboard. Keep vents on the bottom clear — don't use on soft surfaces like beds or pillows.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--amber)">4</div>
+            <div class="step-content">
+              <div class="step-title">Report damage immediately</div>
+              <div class="step-desc">If your device is dropped, cracked, or liquid-damaged, contact HUIT right away at <strong>617-495-7777</strong>. Prompt reporting may prevent further damage and protect you from liability.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="warn-box"><strong>Important:</strong> This is Harvard property. Do not attempt to open, repair, or modify the device yourself. All hardware service must go through HUIT.</div>
+      </div>
+    </div>
+
+    <!-- 5. WHAT TO DO WHEN IT FREEZES -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--purple-bg)">&#10052;</div>
+        <div class="guide-header-text">
+          <h3>If Your Device Freezes</h3>
+          <p>Step-by-step recovery when things stop responding.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--purple)">1</div>
+            <div class="step-content">
+              <div class="step-title">Wait 60 seconds first</div>
+              <div class="step-desc">Sometimes Windows is processing a background update or large task. Give it a full minute before taking action.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--purple)">2</div>
+            <div class="step-content">
+              <div class="step-title">Open Task Manager</div>
+              <div class="step-desc">Press <span class="step-code">Ctrl + Shift + Esc</span>. Find the unresponsive app, click it, then click <strong>End Task</strong>. This closes the frozen application without restarting everything.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--purple)">3</div>
+            <div class="step-content">
+              <div class="step-title">Full screen freeze</div>
+              <div class="step-desc">Press <span class="step-code">Ctrl + Alt + Del</span> → choose <strong>Restart</strong>. If nothing responds, hold the power button for 10 seconds to force shut down.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--purple)">4</div>
+            <div class="step-content">
+              <div class="step-title">Still happening after restart?</div>
+              <div class="step-desc">If freezing is recurring, contact HUIT support. Don't ignore repeat freezes — they may indicate a hardware issue, failing update, or software conflict that needs attention.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="shortcut-grid" style="margin-top:14px">
+          <div class="shortcut-row"><span class="shortcut-label">Task Manager</span><span class="shortcut-keys">Ctrl+Shift+Esc</span></div>
+          <div class="shortcut-row"><span class="shortcut-label">Force options</span><span class="shortcut-keys">Ctrl+Alt+Del</span></div>
+          <div class="shortcut-row"><span class="shortcut-label">Lock screen</span><span class="shortcut-keys">Win+L</span></div>
+          <div class="shortcut-row"><span class="shortcut-label">Screenshot</span><span class="shortcut-keys">Win+Shift+S</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. ACCESS & SECURITY -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--crimson-bg)">&#128274;</div>
+        <div class="guide-header-text">
+          <h3>Access &amp; Security</h3>
+          <p>HarvardKey, Okta Verify, and keeping your account safe.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">1</div>
+            <div class="step-content">
+              <div class="step-title">HarvardKey is your master login</div>
+              <div class="step-desc">Your <strong>HarvardKey</strong> (e.g. jsmith) and password unlocks email, Canvas, VPN, and most Harvard systems. Set it up or reset it at <strong>key.harvard.edu</strong>.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">2</div>
+            <div class="step-content">
+              <div class="step-title">Set up Okta Verify (MFA)</div>
+              <div class="step-desc">Harvard requires two-factor authentication. Download <strong>Okta Verify</strong> on your phone from the App Store or Google Play. Open it, tap Add Account, and scan the QR code shown at login.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">3</div>
+            <div class="step-content">
+              <div class="step-title">Lock your screen when away</div>
+              <div class="step-desc">Press <span class="step-code">Win+L</span> every time you step away from your desk. This is a Harvard IT policy requirement and protects sensitive data.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">4</div>
+            <div class="step-content">
+              <div class="step-title">Report suspicious activity immediately</div>
+              <div class="step-desc">If you receive unexpected MFA prompts, notice unfamiliar logins, or think your account is compromised — call HUIT immediately at <strong>617-495-7777</strong>. Do not wait.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="tip-box"><strong>Never share your HarvardKey password</strong> — not with IT support, managers, or colleagues. HUIT will never ask for your password. Anyone who does is attempting fraud.</div>
+      </div>
+    </div>
+
+  </div><!-- /guide-grid -->
+</div><!-- /section-dell -->
+
+
+<!-- ══════════════════════════════════════════
+     APPLE / MAC
+══════════════════════════════════════════ -->
+<div id="section-apple" class="platform-section">
+
+  <div class="platform-intro">
+    <div class="platform-logo logo-apple">&#63743;</div>
+    <div class="platform-intro-text">
+      <h2>Apple — Mac Quick Guides</h2>
+      <p>Six essential guides for your new Harvard MacBook or Mac desktop running macOS.</p>
+    </div>
+  </div>
+
+  <div class="guide-grid">
+
+    <!-- 1. GETTING HELP -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--crimson-bg)">&#128222;</div>
+        <div class="guide-header-text">
+          <h3>Getting Help from HUIT</h3>
+          <p>Hardware issues, software problems, account help — we've got you.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">1</div>
+            <div class="step-content">
+              <div class="step-title">Submit a ticket online</div>
+              <div class="step-desc">Go to <strong>huit.harvard.edu/it-help</strong> and click "Get Help." Sign in with your HarvardKey. Describe your issue — a technician will follow up via email or phone.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">2</div>
+            <div class="step-content">
+              <div class="step-title">Call the Help Desk</div>
+              <div class="step-desc">Phone: <strong>617-495-7777</strong>. Available Monday–Friday, 8am–8pm ET. HUIT technicians are trained on both Mac and Windows — no issue is too small.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">3</div>
+            <div class="step-content">
+              <div class="step-title">Walk-in support</div>
+              <div class="step-desc">Visit the HUIT Tech Bar for hands-on help with your Mac. They can assist with hardware repairs, Apple ID issues, and software setup. Check <strong>huit.harvard.edu/locations</strong>.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">4</div>
+            <div class="step-content">
+              <div class="step-title">Loaner devices</div>
+              <div class="step-desc">Mac in for repair? Ask about loaner devices at the Tech Bar or visit <strong>huit.harvard.edu/loaner</strong>. The WISC program also provides equipment access.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="tip-box"><strong>Tip:</strong> Your serial number is under Apple menu (&#63743;) → About This Mac → System Report. Have your HUID ready when contacting support.</div>
+      </div>
+    </div>
+
+    <!-- 2. RESTART & RESET -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--blue-bg)">&#128260;</div>
+        <div class="guide-header-text">
+          <h3>Restart, Shut Down &amp; Reset</h3>
+          <p>Keep your Mac running smoothly with proper restarts.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--blue)">1</div>
+            <div class="step-content">
+              <div class="step-title">Restart your Mac</div>
+              <div class="step-desc">Click the <strong>Apple menu (&#63743;)</strong> → <strong>Restart</strong>. Restart regularly to install updates and clear memory. Your Mac may prompt you to restart after system updates — don't postpone indefinitely.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--blue)">2</div>
+            <div class="step-content">
+              <div class="step-title">Shut down properly</div>
+              <div class="step-desc">Apple menu (&#63743;) → <strong>Shut Down</strong>. This saves your session correctly. Avoid using the power button to shut down unless the Mac is unresponsive.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--blue)">3</div>
+            <div class="step-content">
+              <div class="step-title">Force restart (frozen Mac)</div>
+              <div class="step-desc">Hold the <strong>power button</strong> for 10 seconds until the Mac turns off. Wait 5 seconds, then press it once to restart. On MacBooks, the power button is in the top-right corner of the keyboard.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--blue)">4</div>
+            <div class="step-content">
+              <div class="step-title">Factory reset (last resort)</div>
+              <div class="step-desc">On macOS Ventura and later: Apple menu → System Settings → General → Transfer or Reset → <strong>Erase All Content and Settings</strong>. Contact HUIT <em>before</em> doing this — your device is Harvard-managed.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="warn-box"><strong>Note:</strong> Harvard-managed Macs use Jamf for device management. A factory reset without HUIT involvement may require re-enrollment and can delay your work.</div>
+      </div>
+    </div>
+
+    <!-- 3. SAVE & SYNC -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--green-bg)">&#9729;</div>
+        <div class="guide-header-text">
+          <h3>Saving &amp; Syncing Files</h3>
+          <p>Keep your work safe and accessible from anywhere.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--green)">1</div>
+            <div class="step-content">
+              <div class="step-title">Use OneDrive (recommended)</div>
+              <div class="step-desc">Download <strong>OneDrive</strong> from the Mac App Store (free with your Harvard account). Sign in with your Harvard email and your files sync to the cloud automatically.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--green)">2</div>
+            <div class="step-content">
+              <div class="step-title">OneDrive in Finder</div>
+              <div class="step-desc">Once signed in, a <strong>OneDrive folder</strong> appears in your Finder sidebar. Save any work file there and it's automatically backed up and accessible from any device.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--green)">3</div>
+            <div class="step-content">
+              <div class="step-title">iCloud is NOT for Harvard work</div>
+              <div class="step-desc">Do not save Harvard work files to iCloud Drive — this is a personal Apple service and does not meet Harvard's data security requirements. Use OneDrive for all work documents.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--green)">4</div>
+            <div class="step-content">
+              <div class="step-title">SharePoint &amp; Teams</div>
+              <div class="step-desc">Team files in Microsoft Teams and SharePoint can also sync to your Mac via OneDrive. Open any Teams channel → Files tab → click <strong>Sync</strong> to add them to Finder.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="green-box"><strong>Quick check:</strong> The OneDrive icon in your menu bar shows a green checkmark when synced, a spinning icon when syncing, and a red X if there's a problem. Click it to see details.</div>
+      </div>
+    </div>
+
+    <!-- 4. CHARGING & CARE -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--amber-bg)">&#9889;</div>
+        <div class="guide-header-text">
+          <h3>Charging &amp; Device Care</h3>
+          <p>Keep your Mac in top condition.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--amber)">1</div>
+            <div class="step-content">
+              <div class="step-title">Use Apple's charger</div>
+              <div class="step-desc">Always use the <strong>Apple MagSafe or USB-C charger</strong> included with your Mac. For USB-C models, use at least a 67W adapter. Underpowered chargers may not charge under load.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--amber)">2</div>
+            <div class="step-content">
+              <div class="step-title">Optimized battery charging</div>
+              <div class="step-desc">macOS includes <strong>Optimized Battery Charging</strong> — it learns your routine and pauses charging above 80% to extend battery lifespan. This is normal and intentional. Check: System Settings → Battery.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--amber)">3</div>
+            <div class="step-content">
+              <div class="step-title">Screen and keyboard care</div>
+              <div class="step-desc">Use only a <strong>dry microfiber cloth</strong> on the display — no sprays or liquids. Do not close the MacBook with anything on the keyboard (pens, cables) — this can crack the screen.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--amber)">4</div>
+            <div class="step-content">
+              <div class="step-title">Report damage immediately</div>
+              <div class="step-desc">Contact HUIT at <strong>617-495-7777</strong> if your Mac is physically damaged. Do not attempt any self-repair — opening an Apple device by a non-authorized technician can void service coverage.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="warn-box"><strong>Important:</strong> Harvard Macs are covered under AppleCare managed through HUIT. All repairs go through the Tech Bar — do not take your device to a retail Apple Store without HUIT authorization.</div>
+      </div>
+    </div>
+
+    <!-- 5. IF IT FREEZES -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--purple-bg)">&#10052;</div>
+        <div class="guide-header-text">
+          <h3>If Your Mac Freezes</h3>
+          <p>Step-by-step recovery when apps or the system stop responding.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--purple)">1</div>
+            <div class="step-content">
+              <div class="step-title">Wait 60 seconds first</div>
+              <div class="step-desc">macOS may be running a background process (Spotlight indexing, software update, Time Machine backup). Give it a full minute before taking action.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--purple)">2</div>
+            <div class="step-content">
+              <div class="step-title">Force quit a frozen app</div>
+              <div class="step-desc">Press <span class="step-code">⌘ + Option + Esc</span>. Select the unresponsive app and click <strong>Force Quit</strong>. This closes just that app without restarting the whole system.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--purple)">3</div>
+            <div class="step-content">
+              <div class="step-title">Full system freeze</div>
+              <div class="step-desc">If nothing responds, hold the <strong>power button</strong> for 10 seconds until the Mac shuts off. Wait 5 seconds, then press the power button to restart.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--purple)">4</div>
+            <div class="step-content">
+              <div class="step-title">Still happening after restart?</div>
+              <div class="step-desc">Open <strong>Activity Monitor</strong> (search in Spotlight: <span class="step-code">⌘ Space</span> → type "Activity Monitor") to see which processes are consuming the most CPU or Memory. Contact HUIT if the issue persists.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="shortcut-grid" style="margin-top:14px">
+          <div class="shortcut-row"><span class="shortcut-label">Force quit</span><span class="shortcut-keys">⌘+Opt+Esc</span></div>
+          <div class="shortcut-row"><span class="shortcut-label">Spotlight search</span><span class="shortcut-keys">⌘+Space</span></div>
+          <div class="shortcut-row"><span class="shortcut-label">Lock screen</span><span class="shortcut-keys">Ctrl+⌘+Q</span></div>
+          <div class="shortcut-row"><span class="shortcut-label">Screenshot</span><span class="shortcut-keys">⌘+Shift+4</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. ACCESS & SECURITY -->
+    <div class="guide-card">
+      <div class="guide-header">
+        <div class="guide-icon" style="background:var(--crimson-bg)">&#128274;</div>
+        <div class="guide-header-text">
+          <h3>Access &amp; Security</h3>
+          <p>HarvardKey, Okta Verify, and keeping your account safe on Mac.</p>
+        </div>
+      </div>
+      <div class="guide-body">
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">1</div>
+            <div class="step-content">
+              <div class="step-title">HarvardKey is your master login</div>
+              <div class="step-desc">Your <strong>HarvardKey</strong> unlocks email, VPN, Canvas, and most Harvard systems. Set up or reset your password at <strong>key.harvard.edu</strong>. Your Harvard email is separate from your Mac login.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">2</div>
+            <div class="step-content">
+              <div class="step-title">Set up Okta Verify (MFA)</div>
+              <div class="step-desc">Download <strong>Okta Verify</strong> on your phone. Open it → tap Add Account → choose Organization → scan the QR code shown at your next Harvard login. Required for all Harvard systems.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">3</div>
+            <div class="step-content">
+              <div class="step-title">Use Touch ID to lock and unlock</div>
+              <div class="step-desc">On MacBooks with Touch ID, set it up under System Settings → Touch ID &amp; Password. Press <span class="step-code">Ctrl+⌘+Q</span> to lock your screen whenever you step away.</div>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-num" style="background:var(--crimson)">4</div>
+            <div class="step-content">
+              <div class="step-title">Report suspicious activity immediately</div>
+              <div class="step-desc">Unexpected MFA pushes, unfamiliar login alerts, or strange behavior? Call HUIT at <strong>617-495-7777</strong> right away. Do not approve MFA requests you didn't initiate.</div>
+            </div>
+          </li>
+        </ul>
+        <div class="tip-box"><strong>Note on Apple ID:</strong> Your Harvard Mac may be linked to a Managed Apple ID through Harvard. Do not sign in with your personal Apple ID on a Harvard-managed device unless specifically directed by HUIT.</div>
+      </div>
+    </div>
+
+  </div><!-- /guide-grid -->
+</div><!-- /section-apple -->
+
+<!-- CONTACT STRIP -->
+<div class="contact-strip">
+  <div class="contact-strip-left">
+    <h3>Need more help? We're here.</h3>
+    <p>HUIT Endpoint Solutions · Harvard University Information Technology</p>
+  </div>
+  <div class="contact-chips">
+    <a class="contact-chip" href="tel:16174957777">&#128222; 617-495-7777</a>
+    <a class="contact-chip" href="https://huit.harvard.edu/it-help">&#127760; Submit a ticket</a>
+    <a class="contact-chip" href="https://huit.harvard.edu/loaner">&#128187; Loaner program</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  HUIT Endpoint Solutions &nbsp;·&nbsp; New Device Welcome Kit &nbsp;·&nbsp; FY26 &nbsp;·&nbsp; Harvard University &nbsp;·&nbsp; Internal use only
+</footer>
+
+<script>
+function switchPlatform(platform, btn) {
+  document.querySelectorAll('.platform-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+  document.getElementById('section-' + platform).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: document.querySelector('.platform-nav').offsetTop - 60, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
