@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HUIT — Device Refresh Tool</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --crimson:       #A51C30;
+      --crimson-dark:  #8c1626;
+      --crimson-muted: #f8eaec;
+      --navy:          #1a2340;
+      --navy-mid:      #2c3a5c;
+      --slate:         #4a5568;
+      --slate-light:   #718096;
+      --border:        #e2e4e9;
+      --bg:            #f4f5f8;
+      --white:         #ffffff;
+      --success:       #0f6e56;
+      --success-bg:    #e1f5ee;
+      --success-bdr:   #9FE1CB;
+      --amber:         #7a4a0a;
+      --amber-bg:      #fdf3e1;
+      --amber-bdr:     #FAC775;
+      --blue:          #185fa5;
+      --blue-bg:       #e8f2fb;
+      --blue-bdr:      #B5D4F4;
+      --font:          'DM Sans', sans-serif;
+      --mono:          'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--navy);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--navy);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+    .topbar-inner {
+      max-width: 960px;
+      width: 100%;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .shield {
+      width: 26px;
+      height: 30px;
+      flex-shrink: 0;
+    }
+    .topbar-name { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); }
+    .topbar-sub  { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 1px; }
+    .topbar-tag  {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      background: var(--crimson-muted);
+      border-radius: 20px;
+      padding: 4px 14px;
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: -0.025em;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .hero h1 strong { font-weight: 600; }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--slate-light);
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    /* ── REFRESH ALERT BANNER ── */
+    .refresh-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--amber-bg);
+      border: 1px solid var(--amber-bdr);
+      border-radius: 10px;
+      padding: 14px 18px;
+      text-align: left;
+    }
+    .refresh-banner-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .refresh-banner-body { font-size: 13px; color: var(--amber); line-height: 1.55; }
+    .refresh-banner-body strong { font-weight: 600; display: block; margin-bottom: 3px; }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+
+    /* ── HUID LOOKUP BOX ── */
+    .lookup-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 2rem;
+    }
+    .lookup-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--slate-light);
+      margin-bottom: 10px;
+    }
+    .lookup-row {
+      display: flex;
+      gap: 10px;
+    }
+    .lookup-row input {
+      flex: 1;
+      padding: 11px 16px;
+      font-size: 15px;
+      font-family: var(--mono);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      color: var(--navy);
+      background: var(--bg);
+      letter-spacing: 0.04em;
+      transition: border-color 0.15s;
+    }
+    .lookup-row input:focus { border-color: var(--navy); background: var(--white); }
+    .lookup-row input::placeholder { font-family: var(--font); letter-spacing: normal; color: #aab; }
+    .lookup-btn {
+      background: var(--crimson);
+      color: white;
+      border: none;
+      padding: 11px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: var(--font);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .lookup-btn:hover  { background: var(--crimson-dark); }
+    .lookup-btn:active { transform: scale(0.98); }
+    .lookup-hint {
+      font-size: 12px;
+      color: var(--slate-light);
+      margin-top: 8px;
+    }
+
+    /* ── RESULT CARD ── */
+    #result-area { display: none; }
+
+    .result-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      animation: fadeUp 0.25s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-topbar {
+      background: var(--navy);
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .result-user-name { font-size: 16px; font-weight: 600; color: white; }
+    .result-user-sub  { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .persona-pill {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: 20px;
+      background: var(--crimson);
+      color: white;
+      white-space: nowrap;
+    }
+
+    .result-body { padding: 24px 28px; }
+
+    /* user meta grid */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .meta-cell {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .meta-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--slate-light);
+      margin-bottom: 4px;
+    }
+    .meta-value {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--navy);
+      word-break: break-word;
+    }
+    .meta-mono { font-family: var(--mono); font-size: 12px; }
+
+    /* safety net warning */
+    .safety-net {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--amber-bg);
+      border: 1px solid var(--amber-bdr);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--amber);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .safety-net-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+
+    /* persona section */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--slate-light);
+      margin-bottom: 12px;
+    }
+    .persona-block {
+      background: var(--blue-bg);
+      border: 1px solid var(--blue-bdr);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+    .persona-main  { font-size: 15px; font-weight: 600; color: var(--blue); margin-bottom: 4px; }
+    .persona-sub   { font-size: 13px; color: var(--blue); opacity: 0.8; }
+    .persona-key   { font-size: 11px; font-family: var(--mono); color: var(--slate-light); margin-top: 6px; }
+
+    /* device cards */
+    .device-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+    }
+    .device-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      background: var(--white);
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .device-card:hover {
+      border-color: #b5c0d0;
+      box-shadow: 0 3px 12px rgba(26,35,64,0.07);
+    }
+    .device-brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .badge-dell  { background: var(--blue-bg);   color: var(--blue); }
+    .badge-apple { background: #f1efe8; color: #444441; }
+    .device-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+    .device-spec {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--slate-light);
+      line-height: 1.7;
+    }
+    .device-link {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--crimson);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .device-link:hover { text-decoration: underline; }
+
+    /* logic flow trace */
+    .logic-trace {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--slate-light);
+    }
+    .logic-trace strong { color: var(--slate); font-weight: 500; }
+    .logic-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+      margin-top: 6px;
+    }
+    .logic-step {
+      font-size: 11px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 2px 8px;
+      color: var(--slate);
+      font-family: var(--mono);
+    }
+    .logic-arrow { color: #ccd; font-size: 12px; }
+
+    /* reset link */
+    .reset-row {
+      margin-top: 20px;
+      text-align: right;
+    }
+    .reset-btn {
+      background: none;
+      border: none;
+      font-size: 13px;
+      font-family: var(--font);
+      color: var(--slate-light);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .reset-btn:hover { color: var(--navy); }
+
+    /* ── PHASE TRACKER ── */
+    .phase-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 28px;
+      margin-top: 2rem;
+    }
+    .phase-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .phase-title { font-size: 14px; font-weight: 600; color: var(--navy); }
+    .phase-badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--crimson-muted);
+      color: var(--crimson);
+      padding: 3px 10px;
+      border-radius: 8px;
+    }
+    .phase-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--slate);
+      line-height: 1.5;
+    }
+    .phase-item:last-child { border-bottom: none; }
+    .phase-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .dot-done { background: var(--success);    color: white; border: none; }
+    .dot-wip  { background: var(--amber-bg);   color: var(--amber); border: 1.5px solid var(--amber-bdr); }
+    .dot-open { background: transparent; color: var(--slate-light); border: 1.5px solid var(--border); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 11px;
+      color: var(--slate-light);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.5rem; }
+      main { padding: 1.5rem 1rem 4rem; }
+      .lookup-card { padding: 20px; }
+      .result-body { padding: 18px; }
+      .lookup-row { flex-direction: column; }
+      .lookup-btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-brand">
+      <!-- Harvard shield SVG -->
+      <svg class="shield" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2L38 10V28C38 38 30 44 20 46C10 44 2 38 2 28V10L20 2Z" fill="#A51C30"/>
+        <text x="20" y="26" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">VE·RI</text>
+        <text x="20" y="37" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">TAS</text>
+      </svg>
+      <div>
+        <div class="topbar-name">HUIT Endpoint Solutions</div>
+        <div class="topbar-sub">Harvard University Information Technology</div>
+      </div>
+    </div>
+    <div class="topbar-tag">FY26 · Phase 2</div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-pill">&#9670; Hardware Standards Program</div>
+  <h1>Device <strong>Refresh Tool</strong></h1>
+  <p class="hero-sub">Enter your Harvard ID to receive a standardized device recommendation based on your role and persona assignment.</p>
+
+  <div class="refresh-banner">
+    <div class="refresh-banner-icon">&#9888;&#65039;</div>
+    <div class="refresh-banner-body">
+      <strong>Refresh notification active</strong>
+      If you received a red zone asset alert, your device has reached its refresh threshold. Use this tool to confirm your standardized replacement before submitting to procurement.
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- LOOKUP CARD -->
+  <div class="lookup-card">
+    <div class="lookup-label">Step 1 — Enter your Harvard University ID (HUID)</div>
+    <div class="lookup-row">
+      <input type="text" id="harvardID" placeholder="e.g. 60846642" maxlength="12" autocomplete="off" />
+      <button class="lookup-btn" onclick="lookupUser()">Find My Device &#8594;</button>
+    </div>
+    <p class="lookup-hint">Your HUID is the 8-digit number on your Harvard ID card. Press Enter or click the button to look up your recommendation.</p>
+  </div>
+
+  <!-- RESULT AREA -->
+  <div id="result-area">
+    <div id="result-card-wrap"></div>
+    <div class="reset-row">
+      <button class="reset-btn" onclick="resetTool()">&#8592; Look up a different ID</button>
+    </div>
+  </div>
+
+  <!-- PHASE 2 TRACKER -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <div class="phase-title">Phase 2 FY26 priorities</div>
+      <div class="phase-badge">In progress</div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-dot dot-done">&#10003;</div>
+      <div>Socialize phase 1 findings and recommendations</div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-dot dot-done">&#10003;</div>
+      <div>Engage in Dell negotiations to align with new recommendations</div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-dot dot-done">&#10003;</div>
+      <div>Continue Windows SCCM and Mac provisioning process enhancements</div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-dot dot-wip">&#9679;</div>
+      <div><strong>Create online hardware selector tool complete with model guides</strong> — prototype complete, pending integration</div>
+    </div>
+    <div class="phase-item">
+      <div class="phase-dot dot-open"></div>
+      <div><strong>Develop an implementation and training plan to support standards adoption</strong> — in progress</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  HUIT Endpoint Solutions &nbsp;·&nbsp; Hardware Standards Program &nbsp;·&nbsp; FY26 Phase 2 &nbsp;·&nbsp; Internal use only
+</footer>
+
+<script>
+  // ─────────────────────────────────────────────
+  // DATA LAYER — v3
+  // Logic: HUID → HR record → (mainGroup + subProfile) → devices
+  // Safety net: unknown HUID or unmapped job code → Academic Core
+  // ─────────────────────────────────────────────
+
+  // DEVICE MATRIX — updated to FY26 Phase 2 specs
+  const academicMatrix = {
+    core: {
+      label: "Academic & Administrative Professional — Core",
+      desc: "Balance of performance and portability for standard academic and administrative workflows.",
+      devices: [
+        { brand:"dell",  name:"Dell Pro 13/14 Plus",        spec:"Ultra 5 · 32 GB RAM · 512 GB SSD",      url:"https://www.dell.com/en-us/shop/dell-laptops/sr/laptops/pro" },
+        { brand:"apple", name:"MacBook Air",                spec:"M5 · 16 GB RAM · 512 GB or 1 TB SSD",   url:"https://www.apple.com/macbook-air/" },
+        { brand:"apple", name:"MacBook Pro 14-inch",        spec:"M5 Pro · 24 GB RAM · 1 TB SSD",         url:"https://www.apple.com/shop/buy-mac/macbook-pro" }
+      ]
+    },
+    advanced: {
+      label: "Academic & Administrative Professional — Advanced",
+      desc: "Advanced functionality in business systems: records management, database front ends, HR systems.",
+      devices: [
+        { brand:"dell",  name:"Dell Pro Max 14 or 16",      spec:"Ultra 7 · 32 GB RAM · 512 GB SSD",      url:"https://www.dell.com/en-us/shop/dell-laptops/sr/laptops/pro" },
+        { brand:"apple", name:"MacBook Pro 14- or 16-inch", spec:"M5 Pro · 24 GB RAM · 1 TB SSD",         url:"https://www.apple.com/shop/buy-mac/macbook-pro" }
+      ]
+    },
+    fixed: {
+      label: "Academic & Administrative Professional — Fixed",
+      desc: "Fixed-location workstation for shared spaces, student labs, reception desks, and kiosk locations.",
+      devices: [
+        { brand:"dell",  name:"Dell Pro Slim Desktop",      spec:"Ultra 5 · 32 GB RAM · 512 GB SSD",      url:"https://www.dell.com/en-us/shop/desktop-computers/sr/desktops/pro" },
+        { brand:"dell",  name:"Dell Pro All-in-One 25",     spec:"Ultra 5 · 32 GB RAM · 512 GB SSD",      url:"https://www.dell.com/en-us/shop/desktop-computers/sr/desktops/pro" },
+        { brand:"apple", name:"iMac",                       spec:"M5 Pro · 24 GB RAM · 512 GB SSD",       url:"https://www.apple.com/shop/buy-mac/imac" }
+      ]
+    },
+    mobile: {
+      label: "Academic & Administrative Professional — Mobile",
+      desc: "Frequently on the move across campus or globally. Lightweight yet powerful.",
+      devices: [
+        { brand:"dell",  name:"Dell Pro 13 Premium",        spec:"Ultra 5 · 32 GB RAM · 512 GB SSD",      url:"https://www.dell.com/en-us/shop/dell-laptops/sr/laptops/pro" },
+        { brand:"apple", name:"MacBook Air",                spec:"M5 · 16 GB RAM · 512 GB SSD",           url:"https://www.apple.com/macbook-air/" }
+      ]
+    }
+  };
+
+  const powerMatrix = {
+    core: {
+      label: "Power & Specialist — Core",
+      desc: "Processes and visualizes large data sets and reporting across the university.",
+      devices: [
+        { brand:"dell",  name:"Dell Pro Max Premium 14 or 16", spec:"Ultra 7 · 32 GB RAM · 512 GB SSD",  url:"https://www.dell.com/en-us/shop/dell-laptops/sr/laptops/pro" },
+        { brand:"apple", name:"MacBook Pro 14- or 16-inch",    spec:"M5 Pro · 24 GB RAM · 1 TB SSD",     url:"https://www.apple.com/shop/buy-mac/macbook-pro" }
+      ]
+    },
+    mobile: {
+      label: "Power & Specialist — Mobile",
+      desc: "Instruction-focused professionals needing presentation tools, multitasking, and stylus input.",
+      devices: [
+        { brand:"dell",  name:"Dell Pro 13 Plus 2-in-1",       spec:"Ultra 7 · 32 GB RAM · 512 GB SSD",  url:"https://www.dell.com/en-us/shop/dell-laptops/sr/laptops/pro" },
+        { brand:"apple", name:"MacBook Pro 14-inch",           spec:"M5 Pro · 24 GB RAM · 1 TB SSD",     url:"https://www.apple.com/shop/buy-mac/macbook-pro" }
+      ]
+    },
+    advanced: {
+      label: "Power & Specialist — Advanced",
+      desc: "High-performance demands: development, heavy computation, intensive workloads, design, AI.",
+      devices: [
+        { brand:"dell",  name:"Dell Pro Max Plus 16 or 18",    spec:"Ultra 7 or 9 · 32 GB RAM · 512 GB SSD", url:"https://www.dell.com/en-us/shop/dell-laptops/sr/laptops/pro" },
+        { brand:"apple", name:"MacBook Pro 14- or 16-inch",   spec:"M5 Max · 36 GB RAM · 1 TB SSD",     url:"https://www.apple.com/shop/buy-mac/macbook-pro" },
+        { brand:"dell",  name:"Dell Pro Max Tower",            spec:"Ultra 7 or 9 · 32 GB RAM · 512 GB SSD", url:"https://www.dell.com/en-us/shop/desktop-computers/sr/desktops/pro" },
+        { brand:"apple", name:"Mac Studio",                    spec:"M4 Max · 36 GB RAM · 512 GB SSD",   url:"https://www.apple.com/mac-studio/" }
+      ]
+    }
+  };
+
+  // POLICY ENGINE — maps job code → { mainGroup, subProfile }
+  // Extend this object as more job codes are mapped from HR analysis
+  const jobCodeRules = {
+    // Academic & Administrative
+    "I0756M":                    { mainGroup:"academic", subProfile:"advanced"  },  // IT Svc Mgmt Mgt V / Assoc Director
+    "IT Program Manager V":      { mainGroup:"academic", subProfile:"advanced"  },  // Program Manager
+    "Administrative/Refresh Coordinator": { mainGroup:"academic", subProfile:"core" },
+    // Power & Specialist
+    "I0858P":                    { mainGroup:"power",    subProfile:"core"      },  // Assoc Systems Engineer
+    "Software Engineer":         { mainGroup:"power",    subProfile:"advanced"  },
+    "Software Engineer Sr":      { mainGroup:"power",    subProfile:"advanced"  }
+  };
+
+  // NORMALIZE MICRO LABEL from CSV column (v2 logic carried forward)
+  function normalizeMicro(raw) {
+    if (!raw) return null;
+    const s = raw.toLowerCase().trim();
+    if (s.includes("advanced")) return "advanced";
+    if (s.includes("mobile"))   return "mobile";
+    if (s.includes("fixed"))    return "fixed";
+    if (s.includes("core"))     return "core";
+    return null;
+  }
+
+  // HR ROSTER — embed your CSV rows here
+  // Columns: HUID, Name, classdescription, jobfamily, jobtitle, businesstitle, personaGroup, personaMicro
+  const csvText = `
+Harvard ID,Name,classdescription,jobfamily,jobtitle,businesstitle,persona,micro
+60846642,Eric Thompson,Admin & Professional,IT Enterprise Management,IT Service Management Mgt V,Associate Director Endpoint Solutions,Power & Specialist User,Core
+60917469,Bailey Andrews,Admin & Professional,IT Project Management,IT Program Manager V,IT Program Manager Endpoint Solutions,Academic & Administrative Professional User,Advanced
+81401640,Jenn Vasconcelos,Admin & Professional,IT Enterprise Management,IT Service Management Mgt V,Associate Director Client Services PMO,Power & Specialist User,Core
+71775372,Samantha Diaz,Admin & Professional,Administrative/Refresh Coordinator,IT Procurement and Refresh,Not applicable,Academic & Administrative Professional User,Core
+80849052,Brian Weeks,Admin & Professional,Not Assigned,Software Engineer,Associate Systems Engineer,Power & Specialist User,Advanced
+11276555,Junda Sun,Admin & Professional,Not Assigned,Software Engineer Sr,Associate Systems Engineer,Power & Specialist User,Advanced
+`.trim();
+
+  const users = {};
+
+  function loadUsers() {
+    const lines = csvText.split("\n");
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+      const c = line.split(",");
+      users[c[0].trim()] = {
+        name:           c[1] ? c[1].trim() : "—",
+        classdesc:      c[2] ? c[2].trim() : "—",
+        jobfamily:      c[3] ? c[3].trim() : "—",
+        jobtitle:       c[4] ? c[4].trim() : "—",
+        businesstitle:  c[5] ? c[5].trim() : "—",
+        personaGroup:   c[6] ? c[6].trim() : null,
+        personaMicro:   c[7] ? c[7].trim() : null
+      };
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // LOOKUP ENGINE
+  // Priority: CSV micro column → job code rule → safety net
+  // ─────────────────────────────────────────────
+  function lookupUser() {
+    const id = document.getElementById("harvardID").value.trim();
+    const resultArea = document.getElementById("result-area");
+    const wrap = document.getElementById("result-card-wrap");
+
+    if (!id) {
+      wrap.innerHTML = renderError("Please enter your Harvard ID.");
+      resultArea.style.display = "block";
+      return;
+    }
+
+    let user = users[id];
+    let mainGroup    = "academic";
+    let subProfile   = "core";
+    let safetyNet    = false;
+    let safetyReason = "";
+    let lookupPath   = "";
+
+    if (!user) {
+      safetyNet    = true;
+      safetyReason = "HUID not found in HR roster. Default baseline profile applied (Academic Core).";
+      lookupPath   = "HUID → not found → safety net";
+      user = { name:"Unknown User", classdesc:"N/A", jobfamily:"N/A", jobtitle:"N/A", businesstitle:"N/A", personaGroup:null, personaMicro:null };
+    } else {
+      // Priority 1: micro column from CSV
+      const micro = normalizeMicro(user.personaMicro);
+      const pg    = user.personaGroup ? user.personaGroup.toLowerCase() : "";
+      if (micro) {
+        mainGroup  = pg.includes("power") ? "power" : "academic";
+        subProfile = micro;
+        lookupPath = "HUID → HR record → persona column → " + mainGroup + "/" + subProfile;
+      }
+      // Priority 2: job code rule
+      else if (jobCodeRules[user.jobtitle] || jobCodeRules[user.jobfamily]) {
+        const rule  = jobCodeRules[user.jobtitle] || jobCodeRules[user.jobfamily];
+        mainGroup   = rule.mainGroup;
+        subProfile  = rule.subProfile;
+        lookupPath  = "HUID → HR record → job code rule → " + mainGroup + "/" + subProfile;
+      }
+      // Safety net
+      else {
+        safetyNet    = true;
+        safetyReason = "Job code [" + user.jobtitle + "] has no mapping rule. Default baseline profile applied (Academic Core).";
+        lookupPath   = "HUID → HR record → no rule match → safety net";
+      }
+    }
+
+    // Resolve persona object
+    const matrix  = mainGroup === "power" ? powerMatrix : academicMatrix;
+    const persona = matrix[subProfile] || academicMatrix.core;
+
+    wrap.innerHTML = renderResult(id, user, persona, mainGroup, subProfile, safetyNet, safetyReason, lookupPath);
+    resultArea.style.display = "block";
+    setTimeout(() => resultArea.scrollIntoView({ behavior:"smooth", block:"nearest" }), 60);
+  }
+
+  // ─────────────────────────────────────────────
+  // RENDER FUNCTIONS
+  // ─────────────────────────────────────────────
+  function renderResult(id, user, persona, mainGroup, subProfile, safetyNet, safetyReason, lookupPath) {
+    const brandBadge = b => b === "dell"
+      ? "<span class='device-brand-badge badge-dell'>&#9642; Dell</span>"
+      : "<span class='device-brand-badge badge-apple'>&#63743; Apple</span>";
+
+    let devCards = "";
+    persona.devices.forEach(d => {
+      devCards += `
+        <div class="device-card">
+          ${brandBadge(d.brand)}
+          <div class="device-name">${d.name}</div>
+          <div class="device-spec">${d.spec}</div>
+          <a class="device-link" href="${d.url}" target="_blank" rel="noopener">View model &#8599;</a>
+        </div>`;
+    });
+
+    const safetyHtml = safetyNet ? `
+      <div class="safety-net">
+        <div class="safety-net-icon">&#9888;&#65039;</div>
+        <div>${safetyReason}</div>
+      </div>` : "";
+
+    return `
+      <div class="result-card">
+        <div class="result-topbar">
+          <div>
+            <div class="result-user-name">${user.name}</div>
+            <div class="result-user-sub">HUID: ${id}</div>
+          </div>
+          <div class="persona-pill">${mainGroup === "power" ? "Power &amp; Specialist" : "Academic &amp; Admin"} &mdash; ${cap(subProfile)}</div>
+        </div>
+
+        <div class="result-body">
+          ${safetyHtml}
+
+          <div class="section-title">User account details</div>
+          <div class="meta-grid">
+            <div class="meta-cell"><div class="meta-label">Class</div><div class="meta-value">${user.classdesc}</div></div>
+            <div class="meta-cell"><div class="meta-label">Job family</div><div class="meta-value">${user.jobfamily}</div></div>
+            <div class="meta-cell"><div class="meta-label">Job title</div><div class="meta-value">${user.jobtitle}</div></div>
+            <div class="meta-cell"><div class="meta-label">Business title</div><div class="meta-value">${user.businesstitle}</div></div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="section-title">Persona assignment</div>
+          <div class="persona-block">
+            <div class="persona-main">${persona.label}</div>
+            <div class="persona-sub">${persona.desc}</div>
+            <div class="persona-key">lookup key: ${mainGroup}/${subProfile}</div>
+          </div>
+
+          <div class="section-title">Recommended devices</div>
+          <div class="device-grid">${devCards}</div>
+
+          <div class="logic-trace">
+            <strong>Resolution path:</strong>
+            <div class="logic-steps">
+              ${lookupPath.split(" → ").map(s => `<span class="logic-step">${s}</span>`).join('<span class="logic-arrow"> &rsaquo; </span>')}
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function renderError(msg) {
+    return `<div style="padding:16px 20px;background:var(--crimson-muted);border:1px solid #e8a0a9;border-radius:10px;font-size:13px;color:var(--crimson);">${msg}</div>`;
+  }
+
+  function cap(s) {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+
+  function resetTool() {
+    document.getElementById("harvardID").value = "";
+    document.getElementById("result-area").style.display = "none";
+    document.getElementById("result-card-wrap").innerHTML = "";
+    document.getElementById("harvardID").focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // Enter key support
+  document.getElementById("harvardID").addEventListener("keypress", e => {
+    if (e.key === "Enter") { e.preventDefault(); lookupUser(); }
+  });
+
+  // Boot
+  loadUsers();
+</script>
+</body>
+</html>
