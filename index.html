@@ -43,6 +43,122 @@
     }
 
     /* ── TOPBAR ── */
+  <meta charset="UTF-8">
+  <title>Harvard Device Recommendation Tool</title>
+  <style>
+    .topbar {
+      background: black;
+      height: 87px;
+      display: flex;
+      align-items: center;
+    }
+
+    .topbar-container {
+      width: 1200px;
+      margin: auto;
+    }
+
+    .logo {
+      height: 80px;
+    }
+
+    .page-container {
+      width: 900px;
+      margin: 60px auto;
+      background: white;
+      padding: 42px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-radius: 4px;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 32px;
+      color: #222;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .tool-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    input {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background: #a6053b;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #8c1626;
+    }
+
+    #result {
+      margin-top: 30px;
+      padding: 25px;
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 4px;
+    }
+
+    .device {
+      padding: 12px;
+      background: #efefef;
+      margin-top: 8px;
+      border-radius: 4px;
+    }
+    
+    .device a {
+      color: #a6053b;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .device a:hover {
+      text-decoration: underline;
+    }
+
+    .resultCard {
+      margin-top: 10px;
+      padding: 20px;
+      background: #fafafa;
+      border-left: 5px solid #A51C30;
+      border-radius: 6px;
+      overflow-wrap: break-word;
+    }
+    
+    .warning-text {
+      color: #b00;
+      font-style: italic;
+      font-weight: bold;
+    }
+
+    .persona-key {
+      font-style: italic;
+      color: #666;
+      font-size: 13px;
+      margin-top: 2px;
+      display: block;
+    }
+  </style>
+</head>
     .topbar {
       background: var(--navy);
       height: 56px;
