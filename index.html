@@ -669,8 +669,9 @@
     return null;
   }
 
-  // HR ROSTER — embed your CSV rows here
-  // Columns: HUID, Name, classdescription, jobfamily, jobtitle, businesstitle, personaGroup, personaMicro
+  // We can embed CSV DATA HEREEEE :3 OR HAVE A SYSTEM THAT AUTOMATES THE UPDATES!! Via SNOW
+  // EL LOGICO: HUID >>Name>> classdescription>> jobfamily>> jobtitle>> businesstitle>> personaGroup>> personaMicro
+  // SERIAL NUMBER > HUID < JOB CODE ------- PERSONA : DEVICE RECC
   const csvText = `
 Harvard ID,Name,classdescription,jobfamily,jobtitle,businesstitle,persona,micro
 60846642,Eric Thompson,Admin & Professional,IT Enterprise Management,IT Service Management Mgt V,Associate Director Endpoint Solutions,Power & Specialist User,Core
@@ -679,6 +680,7 @@ Harvard ID,Name,classdescription,jobfamily,jobtitle,businesstitle,persona,micro
 71775372,Samantha Diaz,Admin & Professional,Administrative/Refresh Coordinator,IT Procurement and Refresh,Not applicable,Academic & Administrative Professional User,Core
 80849052,Brian Weeks,Admin & Professional,Not Assigned,Software Engineer,Associate Systems Engineer,Power & Specialist User,Advanced
 11276555,Junda Sun,Admin & Professional,Not Assigned,Software Engineer Sr,Associate Systems Engineer,Power & Specialist User,Advanced
+111,Jenny Lay,Admin & Professional,IT Asset Management,IT Business Analyst,Senior Business Analyst,Power & Specialist User,Core
 `.trim();
 
   const users = {};
@@ -763,6 +765,7 @@ Harvard ID,Name,classdescription,jobfamily,jobtitle,businesstitle,persona,micro
 
   // ─────────────────────────────────────────────
   // RENDER FUNCTIONS
+  // IF you read this you deserve a second sweet treat (thank you for actually reviewing my code)
   // ─────────────────────────────────────────────
   function renderResult(id, user, persona, mainGroup, subProfile, safetyNet, safetyReason, lookupPath) {
     const brandBadge = b => b === "dell"
