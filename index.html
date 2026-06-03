@@ -523,8 +523,6 @@
       <!-- Harvard shield SVG -->
       <svg class="shield" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M20 2L38 10V28C38 38 30 44 20 46C10 44 2 38 2 28V10L20 2Z" fill="#A51C30"/>
-        <text x="20" y="26" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">VE·RI</text>
-        <text x="20" y="37" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="white" text-anchor="middle">TAS</text>
       </svg>
       <div>
         <div class="topbar-name">HUIT Endpoint Solutions</div>
@@ -538,7 +536,7 @@
 <!-- HERO -->
 <div class="hero">
   <div class="hero-pill">&#9670; Hardware Standards Program</div>
-  <h1>Device <strong>Refresh Tool</strong></h1>
+  <h1>Device <strong>Refresh Device Recommendation Tool</strong></h1>
   <p class="hero-sub">Enter your Harvard ID to receive a standardized device recommendation based on your role and persona assignment.</p>
 
   <div class="refresh-banner">
@@ -580,10 +578,10 @@
 <script>
   // ─────────────────────────────────────────────
   // DATA LAYER — v3
-  // Logic: HUID → HR record → (mainGroup + subProfile) → devices
-  // Safety net: unknown HUID or unmapped job code → Academic Core
+  // Logic: HUID >> HR record >> (mainGroup + subProfile) >> devices
+  // Safety net: unknown HUID or unmapped job code >> Academic Core
   // ─────────────────────────────────────────────
-
+ // If you read this.. you rock + you deserve some tacobell or a sweet treat
   // DEVICE MATRIX — updated to FY26 Phase 2 specs
   const academicMatrix = {
     core: {
@@ -651,7 +649,7 @@
     }
   };
 
-  // POLICY ENGINE — maps job code → { mainGroup, subProfile }
+  // POLICY ENGINE — maps job code >> { mainGroup, subProfile }
   // Extend this object as more job codes are mapped from HR analysis
   const jobCodeRules = {
     // Academic & Administrative
@@ -709,7 +707,7 @@ Harvard ID,Name,classdescription,jobfamily,jobtitle,businesstitle,persona,micro
 
   // ─────────────────────────────────────────────
   // LOOKUP ENGINE
-  // Priority: CSV micro column → job code rule → safety net
+  // Priority: CSV micro column >> job code rule >> safety net
   // ─────────────────────────────────────────────
   function lookupUser() {
     const id = document.getElementById("harvardID").value.trim();
